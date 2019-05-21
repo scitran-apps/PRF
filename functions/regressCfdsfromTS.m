@@ -9,30 +9,38 @@ rewrite with same name _REGRESSED
 confoundsmat: can be a matrix or a path name to the .tsv output file
 Optional parameters:
 
-datamat      = '/Users/glerma/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_space-fsnative_hemi-L.func.mgh';
-datamat      = '/Users/glerma/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_space-T1w_desc-preproc_bold.nii.gz';
-confoundsmat = '/Users/glerma/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_desc-confounds_regressors.tsv';
+datamat      = '/Users/glerma/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-03_space-fsnative_hemi-L.func.gii';
+confoundsmat = '/Users/glerma/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-03_desc-confounds_regressors.tsv';
 writeNifti   = true;
+add2name     = '_REGRESSED2';
 
-    newts = regressCfdsfromTS(datamat, confoundsmat, 'writeNifti', true);
+    newts = regressCfdsfromTS(datamat, confoundsmat, 'writeNifti', true, 'add2name', add2name);
 
-
+Garikoitz Lerma-Usabiaga 04.2019 garikoitz@gmail.com Stanford Vista Lab
 %}
     %% Parse inputs
     p = inputParser;
 
     addRequired(p, 'datamat');
     addRequired(p, 'confoundsmat');
-    addOptional(p, 'writeNifti',false, @islogical);
+    addOptional(p, 'writeNifti', false, @islogical);
+    addOptional(p, 'add2name'  , '_REGRESSED', @ischar);
 
     parse(p,datamat,confoundsmat,varargin{:});
 
     writeNifti = p.Results.writeNifti;
+    add2name   = p.Results.add2name;
     
     %% Do the thing
 
     % Obtain the matrices
     if ischar(datamat)
+        [FILEPATH,NAME,EXT] = fileparts(datamat);
+        if strcmp(EXT,'.gii')
+            mghFileName = [FILEPATH filesep NAME '.mgh'];
+            system(['mri_convert ' datamat ' ' mghFileName])
+            datamat = mghFileName;
+        end
         mriFile = MRIread(datamat);
         volFile = mriFile.vol;
         mriSize = size(volFile);
@@ -61,7 +69,7 @@ writeNifti   = true;
     
     % Do the regression
     demeanmat = confoundsmat - mean(confoundsmat);
-    newts = ts - (demeanmat * (pinv(demeanmat) * ts'))';
+    newts     = ts - (demeanmat * (pinv(demeanmat) * ts'))';
     
     % Write the file back if asked to
     if writeNifti && ischar(datamat)
@@ -71,7 +79,7 @@ writeNifti   = true;
             NAME = NAME(1:end-4);
             EXT  = '.nii.gz';
         end
-        writeNiftiName = [FILEPATH filesep NAME '_REGRESSED' EXT];
+        writeNiftiName = [FILEPATH filesep NAME add2name EXT];
         MRIwrite(mriFile, writeNiftiName);
     end
 end

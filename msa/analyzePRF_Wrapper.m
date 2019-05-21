@@ -197,18 +197,16 @@ stimulus = reshape(trAdjImages, ...
 
 
 % define
-path2func = '/Users/glerma/Downloads/5b6cc2ce7daf4d0010cbc2b1/fmriprep/sub-ex11352/ses-201511281621/func/';
-% runs = {'tfMRI_RETCCW_7T_AP_Atlas_MSMAll_hp2000_clean.dtseries.nii' ...
-%         'tfMRI_RETCW_7T_PA_Atlas_MSMAll_hp2000_clean.dtseries.nii' ...
-%         'tfMRI_RETEXP_7T_AP_Atlas_MSMAll_hp2000_clean.dtseries.nii' ...
-%         'tfMRI_RETCON_7T_PA_Atlas_MSMAll_hp2000_clean.dtseries.nii' ...
-%         'tfMRI_RETBAR1_7T_AP_Atlas_MSMAll_hp2000_clean.dtseries.nii' ...
-%         'tfMRI_RETBAR2_7T_PA_Atlas_MSMAll_hp2000_clean.dtseries.nii'};
-runs = {'sub-ex11352_ses-201511281621_task-91fMRIRetknk_bold_space-T1w_preproc.nii.gz'};
+
+
+path2func = '~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/';
+runs = {'sub-23MAGNO6134_ses-T2_task-ret_run-01_space-fsnative_hemi-L.func_REGRESSED.mgh' ...
+        'sub-23MAGNO6134_ses-T2_task-ret_run-02_space-fsnative_hemi-L.func_REGRESSED.mgh' ...
+        'sub-23MAGNO6134_ses-T2_task-ret_run-03_space-fsnative_hemi-L.func_REGRESSED.mgh' };
     
 % subjs = matchfiles('/path/to/HCP7TRET/??????');  % match 6-digit subject IDs
 subjs = matchfiles('/Users/glerma/Downloads/5b6cc2ce7daf4d0010cbc2b1/fmriprep/sub-ex?????');  % match 6-digit subject IDs
-tr = 1;                % temporal sampling rate in seconds
+tr = 1.82;             % temporal sampling rate in seconds
 pxtodeg = 16.0/200;    % conversion from pixels to degrees
 wbcmd = 'wb_command';  % path to workbench command
 
@@ -262,139 +260,116 @@ stimulus  = load('~/soft/PRF/local/sub-14magno7806/stimuli/20190303192310_subj78
 % !mri_convert ~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_space-fsnative_hemi-L.func.gii ~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_space-fsnative_hemi-L.func.mgh
 % !mri_convert ~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-02_space-fsnative_hemi-L.func.gii ~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-02_space-fsnative_hemi-L.func.mgh
 % !mri_convert ~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-03_space-fsnative_hemi-L.func.gii ~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-03_space-fsnative_hemi-L.func.mgh
-allData = MRIread('~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_space-fsnative_hemi-L.func.mgh');
+% allData = MRIread('~/soft/PRF/local/sub-14magno7806/fmriprep/sub-14MAGNO7806/ses-20190303/func/sub-14MAGNO7806_ses-20190303_task-ret_run-01_space-fsnative_hemi-L.func.mgh');
+% Load the BCBL data in paralel, all variables same name ended in bcbl
+databcbl{1} = MRIread('~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-01_space-fsnative_hemi-L.func_REGRESSED.mgh');
+databcbl{2} = MRIread('~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-02_space-fsnative_hemi-L.func_REGRESSED.mgh');
+databcbl{3} = MRIread('~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-03_space-fsnative_hemi-L.func_REGRESSED.mgh');
 
 
-
-
+databcbl{1} = MRIread('~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-01_space-fsnative_hemi-L.func.mgh');
+databcbl{2} = MRIread('~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-02_space-fsnative_hemi-L.func.mgh');
+databcbl{3} = MRIread('~/soft/PRF/local/sub-23MAGNO6134T2/fmriprep/sub-23MAGNO6134/ses-T2/func/sub-23MAGNO6134_ses-T2_task-ret_run-03_space-fsnative_hemi-L.func.mgh');
 % Remove the initial images that do not apply
-data    = {};
-data{1} = squeeze(allData.vol(:,:,:,5:end));
-% Do we need to reshape to make the code below work? Do it here or delete this line 
-% data{1} = data{1};
+data{1} = squeeze(databcbl{1}.vol(1,:,:,5:end));
+data{2} = squeeze(databcbl{2}.vol(1,:,:,5:end));
+data{3} = squeeze(databcbl{3}.vol(1,:,:,5:end));
 
-% Read the stimuli
-BAR = load('~/soft/PRF/local/sub-14magno7806/stimuli/maskimages.mat');
+
+% Read the mask images (the apertures, they saw words inside the apertures)
+% This file is the same for everybody
+BAR = load('~/soft/PRF/local/sub-23MAGNO6134T2/stimuli/maskimages.mat');
 images = BAR.maskimages;
 
-% And how many images from the beginning will be discarded
-removeImagesN   = 4;
+% Load bcbl stimuli
+stimFileBcbl{1} = load('~/soft/PRF/local/sub-23MAGNO6134T2/stimuli/subj6134_T2_run1_exp103.mat');
+stimFileBcbl{2} = load('~/soft/PRF/local/sub-23MAGNO6134T2/stimuli/subj6134_T2_run2_exp103.mat');
+stimFileBcbl{3} = load('~/soft/PRF/local/sub-23MAGNO6134T2/stimuli/subj6134_T2_run3_exp103.mat');
 
+for ns=1:length(stimFileBcbl)
+    % And how many images from the beginning will be discarded
+    params{ns}.removeImagesN   = 4;
+    % Maddi se aseguro de que termine bien, por lo tanto, esto dura: 161 * 1.82 segundos
+    params{ns}.scanDuration = 300;
+    params{ns}.totalScans   = 165;
+    params{ns}.tr           = 1.82;
+    config{ns}.config.rescaleStimuliImages = true;
+    config{ns}.config.imageSideSize = 100;  
+    
+    
+    % Every 1.82 an image was acquired, and every 1.82 seconds a different image
+    % was shown. Select the image that was shown every 1.82. We know that the
+    % response is later, though
+    
+    % Create the 2D+time dataset of stimulus images over TRs.
+    % We need to sub-sample to have the same number of images as the fMRI timepoints
+    % Create the image index that will select the images shown when the acquisition
+    % took place. Do step by step for clarity:
+%     imIndx{ns} = stimFileBcbl{ns}.frameorder(2,:);
+%     imIndx{ns} = imIndx{ns}(imagesPerSecond{ns}:imagesPerSecond{ns}:4500);
+%     imIndx{ns} = imIndx{ns}(params{ns}.tr:params{ns}.tr:params{ns}.scanDuration+1);
+%     imIndx{ns} = imIndx{ns}((params{ns}.removeImagesN + 1):params{ns}.totalScans);
+%     imIndx{ns}(imIndx{ns}==0)=1;
 
-
-% MAddi se aseguro de que termine bien, por lo tanto, esto dura: 161 * 1.82 segundos
-params.scanDuration = 300;
-params.totalScans   = 165;
-params.tr           = 1.82;
-% And how many images from the beginning will be discarded
-params.removeImagesN   = 4;
-config.config.rescaleStimuliImages = true;
-config.config.imageSideSize = 100;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%% THIS IS DONE ABOVE, DELETE AFTER TESTS %%%%%%%%
-%%%%%%%%%%%% CAREFUL, ABOVE IS USING THE OLD STIM FILES %%%%
-%%%%%%%%%%%% BELOW ADAPTED TO KNK %%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% TODO: there is no seq or no structure which is 4500 long. It is called
-% stimulus.seq
-
-% Try to get the parameters from the file.
-% images       : all possible images (size(images, 3) = 2580 in this example)
-% stimulus.seq : says what image was shown
-% params.tr    : time between whole brain image acquisitions
-
-% We can calculate how many image images per second where displayed
-imagesPerSecond = size(stimulus.frameorder, 2) / params.scanDuration;
-
-
-
-% Create the 2D+time dataset of stimulus images over TRs.
-% We need to sub-sample to have the same number of images as the fMRI timepoints
-% Create the image index that will select the images shown when the acquisition
-% took place. Do step by step for clarity:
-imIndx = stimulus.frameorder(2,:);
-imIndx = imIndx(imagesPerSecond:imagesPerSecond:4500);
-imIndx = imIndx(params.tr:params.tr:params.scanDuration+1);
-imIndx = imIndx((params.removeImagesN + 1):params.totalScans);
-imIndx(imIndx==0)=1;
-% Create the new trAdjImages stimuli set
-trAdjImages = images(:,:,int16(abs(imIndx)));
-
-
-% See if we do need to make the stimuli file smaller (for copmutational purposes)
-if config.config.rescaleStimuliImages
-    %{
-    % We do not want to use imresize because it will interpolate the values
-    % Instead we will find the closest possible value and reduce the filesize manually
-    factorX = floor(size(trAdjImages, 1) / config.config.imageSizeX);
-    factorY = floor(size(trAdjImages, 2) / config.config.imageSizeY);
-    if (factorX < 1); factorX=1; end; % Just in case the desired is bigger, do nothing
-    if (factorY < 1); factorY=1; end;
-    trAdjImages = trAdjImages(1:factorX:end, 1:factorY:end, :);
-    %}
-    % To the exact size
-    temp = zeros(config.config.imageSideSize, config.config.imageSideSize, size(stimulus,3));
-    for p=1:size(trAdjImages, 3)
-        temp(:,:,p) = imresize(trAdjImages(:,:,p),[config.config.imageSideSize config.config.imageSideSize],'cubic');
+    % This is what has been shown
+    allImgRefs = stimFileBcbl{ns}.frameorder(2,:);
+    % Every tr=1.82 an image has been showns, what is the index of this image?
+    % We need to obtain 161 indices, and selected the corresponding number from
+    % the existing 4500 images. 
+    tmpInd = round(1:length(allImgRefs)/params{ns}.totalScans:length(allImgRefs));
+    % Remove the images that correspond to the acquisitions we removed
+    ImgRefs = allImgRefs(tmpInd((params{ns}.removeImagesN + 1):end));
+    % ImgRefs(ImgRefs==0)=1;
+   
+    % Create the new trAdjImages stimuli set
+    trAdjImages{ns} = zeros([size(images,1),size(images,2),size(ImgRefs,2)]);
+    trAdjImages{ns}(:,:,ImgRefs~=0) = images(:,:,ImgRefs(ImgRefs~=0));
+    
+    temp = zeros(config{ns}.config.imageSideSize, config{ns}.config.imageSideSize, size(stimFileBcbl,3));
+    for p=1:size(trAdjImages{ns}, 3)
+        temp(:,:,p) = imresize(trAdjImages{ns}(:,:,p),[config{ns}.config.imageSideSize config{ns}.config.imageSideSize],'cubic');
     end
-    trAdjImages = temp;
+    trAdjImages{ns} = temp;
 
     % ensure that all values are between 0 and 1
-    trAdjImages(trAdjImages < 0) = 0;
-    trAdjImages(trAdjImages > 1) = 1;
+    trAdjImages{ns}(trAdjImages{ns} < 0) = 0;
+    trAdjImages{ns}(trAdjImages{ns} > 1) = 1;
+ 
 end
-
-% For testing, check the images are ok
-%{
-figure; set(gcf,'Position', [100 100 1000 700])
-for ii = 1:77
-    subplot(7,11,ii);
-    imagesc(trAdjImages(:,:,ii));
-    title(ii);
-    axis image tight off;
-    colormap(gray);
-end
-%}
-
-
-% reshape stimuli into a "flattened" format: numscans stimuli x 100*100 positions
-% (note: I do not get why is this, I understand is a analyzePRF requirement)
-% stimulus = reshape(trAdjImages, ...
-%                    config.config.imageSideSize*config.config.imageSideSize, ...
-%                    size(trAdjImages, 3))';
+stimulus = trAdjImages;
 
 
 % Read labels, and only to things within the label
-lh_V1_label_fname = '/Users/glerma/soft/PRF/local/sub-14magno7806/freesurfer/sub-14MAGNO7806/label/lh.V1_exvivo.thresh.label';
-setenv('SUBJECTS_DIR','/Users/glerma/soft/PRF/local/sub-14magno7806/freesurfer')
+lh_V1_label_fname = '~/soft/PRF/local/sub-23MAGNO6134T2/freesurfer/sub-23MAGNO6134/label/lh.V1_exvivo.thresh.label';
+setenv('SUBJECTS_DIR','/Users/glerma/soft/PRF/local/sub-23MAGNO6134/freesurfer')
 lh_V1_label = myFSread_label('sub-14MAGNO7806', lh_V1_label_fname, true);
 lh_V1_label_ind = lh_V1_label(:,1);
 
-lhwhite_fname = '/Users/glerma/soft/PRF/local/sub-14magno7806/freesurfer/sub-14MAGNO7806/surf/lh.white';
+lhwhite_fname = '/Users/glerma/soft/PRF/local/sub-23MAGNO6134/freesurfer/sub-23MAGNO6134T2/surf/lh.white';
 
 
                
                
-% myStim = double(BAR.stim(:,:,1:144));
-myData = double(data{1});
 
-myDataV1 = myData(lh_V1_label_ind+1, :);
-myStim = trAdjImages;
+for ii=1:length(data)
+    dataV1{ii} = data{ii}(lh_V1_label_ind+1, :);
+end
 tr     = 1.82;
-a1     = analyzePRF(myStim,myDataV1,tr,struct('seedmode',0));
+% Launch the analysis
+a1     = analyzePRF(stimulus,dataV1,tr,struct('seedmode',[0 1],'display','off'));
 
 % Just in case
-% save('/Users/glerma/soft/PRF/local/sub-14magno7806/results/a1.mat','a1')
-% load('/Users/glerma/soft/PRF/local/sub-14magno7806/results/a1.mat')
+% save('/Users/glerma/soft/PRF/local/sub-23MAGNO6134T2/results/a1.mat','a1')
+% save('/Users/glerma/soft/PRF/local/sub-23MAGNO6134T2/results/a1_noregr.mat','a1')
+% load('/Users/glerma/soft/PRF/local/sub-23MAGNO6134T2/results/a1.mat')
 % Save it as a FS file
 
-a1toSurf = allData;
+a1toSurf = databcbl{1};
 a1toSurf.vol     = zeros(size(a1toSurf.vol));
 a1toSurf.vol     = a1toSurf.vol(:,:,:,1:6);
 a1toSurf.nframes = 6;
 % assign the values of interest
-pxtodeg = 16.0/200;    % conversion from pixels to degrees
+pxtodeg = 16.0/100;    % conversion from pixels to degrees
 a1toSurf.vol(:,lh_V1_label_ind + 1,1,1) = a1.ang;
 tmpecc = a1.ecc*pxtodeg;     % convert to degrees;
 % whenever eccentricity is exactly 0, we set angle to NaN since it is ill-defined.
@@ -406,7 +381,7 @@ a1toSurf.vol(:,lh_V1_label_ind + 1,1,5) = a1.R2;
 a1toSurf.vol(:,lh_V1_label_ind + 1,1,6) = a1.gain;
 
 
-MRIwrite(a1toSurf, '/Users/glerma/soft/PRF/local/sub-14magno7806/results/a1.mgh')
+MRIwrite(a1toSurf, '/Users/glerma/soft/PRF/local/sub-23MAGNO6134T2/results/a1_noregr.mgh')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -444,7 +419,7 @@ MRIwrite(a1toSurf, '/Users/glerma/soft/PRF/local/sub-14magno7806/results/a1.mgh'
 
 
 
-
+pxtodeg
 
 
 
